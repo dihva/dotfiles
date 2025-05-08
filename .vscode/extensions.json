@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "Extensions installed on Codespaces:",
+    "github.codespaces",
+    "github.copilot",
+    "github.copilot-chat",
+    "github.github-vscode-theme",
+    "github.vscode-pull-request-github",
+    "ms-python.debugpy",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "rust-lang.rust-analyzer",
+    "stephkeys.mermaid-theme"
+  ]
+}
