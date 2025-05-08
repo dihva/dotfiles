@@ -1,6 +1,5 @@
 {
-  "recommendations": [
-    "Extensions installed on Codespaces:",
+  "recommendations": 
     "github.codespaces",
     "github.copilot",
     "github.copilot-chat",
