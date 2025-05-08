@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 SECONDS=0
 
 SCRIPT_COLOR='\033[1;35m'
@@ -22,11 +23,18 @@ if [[ -f "requirements.txt" ]]; then
 elif [[ -f "reqs.txt" ]]; then
   REQ_FILE="reqs.txt"
 else
-  fail "No requirements.txt or reqs.txt file found in ${SCRIPT_DIR}"
+  echo -e "${ERROR_COLOR}No requirements.txt or reqs.txt found — skipping dependency install.${RESET_COLOR}"
+  REQ_FILE=""
 fi
 
-if ! command -v python3 &> /dev/null; then
-  fail "python3 is not installed. Please install Python3."
+if ! command -v python3 &>/dev/null; then
+  echo -e "${ERROR_COLOR}python3 not found. Trying to install…${RESET_COLOR}"
+  if   command -v apt-get &>/dev/null; then
+       sudo apt-get update && sudo apt-get install -y python3 python3-venv
+  else
+       fail "Couldn’t auto-install python (no supported package manager)."
+  fi
+  command -v python3 &>/dev/null || fail "Auto-install failed — please install python3 manually."
 fi
 
 if [ -d ".venv" ]; then
@@ -45,19 +53,24 @@ echo -e "${SCRIPT_COLOR}Creating virtual environment in .venv...${RESET_COLOR}"
 python3 -m venv .venv || fail "Failed to create virtual environment."
 
 echo -e "${SCRIPT_COLOR}Upgrading pip...${RESET_COLOR}"
-if ! .venv/bin/pip install --upgrade pip > >(sed "s/^/${PIP_COLOR}/; s/\$/${RESET_COLOR}/") \
-                                2> >(sed "s/^/${ERROR_COLOR}/; s/\$/${RESET_COLOR}/"); then
+if ! .venv/bin/pip install --upgrade pip \
+        > >(sed "s/^/${PIP_COLOR}/; s/\$/${RESET_COLOR}/") \
+        2> >(sed "s/^/${ERROR_COLOR}/; s/\$/${RESET_COLOR}/"); then
   fail "Failed to upgrade pip."
 fi
 
-echo -e "${SCRIPT_COLOR}Installing dependencies from ${REQ_FILE}...${RESET_COLOR}"
-if ! .venv/bin/pip install -r "${REQ_FILE}" > >(sed "s/^/${PIP_COLOR}/; s/\$/${RESET_COLOR}/") \
-                                          2> >(sed "s/^/${ERROR_COLOR}/; s/\$/${RESET_COLOR}/"); then
-  fail "Failed to install dependencies."
+if [[ -n "$REQ_FILE" ]]; then
+  echo -e "${SCRIPT_COLOR}Installing dependencies from ${REQ_FILE}...${RESET_COLOR}"
+  if ! .venv/bin/pip install -r "${REQ_FILE}" \
+          > >(sed "s/^/${PIP_COLOR}/; s/\$/${RESET_COLOR}/") \
+          2> >(sed "s/^/${ERROR_COLOR}/; s/\$/${RESET_COLOR}/"); then
+    fail "Failed to install dependencies."
+  fi
+else
+  echo -e "${SCRIPT_COLOR}No dependencies to install.${RESET_COLOR}"
 fi
 
-echo -e "${SCRIPT_COLOR}Setup complete. All dependencies have been installed.${RESET_COLOR}"
-echo -e "${SCRIPT_COLOR}Process completed in ${SECONDS} seconds.${RESET_COLOR}"
-
-echo -e "${SCRIPT_COLOR}Activating virtual environment...${RESET_COLOR}"
+echo -e "${SCRIPT_COLOR}Setup complete in ${SECONDS} seconds. Activating venv...${RESET_COLOR}"
 source .venv/bin/activate
+echo -e "${SCRIPT_COLOR}Venv activated. Launching a fresh shell…${RESET_COLOR}"
+exec "$SHELL"
