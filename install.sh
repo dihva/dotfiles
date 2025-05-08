@@ -21,11 +21,12 @@ fi
 
 cp "$SCRIPT_DIR/.bashrc"              "$HOME/.bashrc"
 cp "$SCRIPT_DIR/.venv.sh"             "$HOME/.venv.sh"
-cp "$SCRIPT_DIR/.checkrust.sh"        "$HOME/.checkrust.sh"
+# cp "$SCRIPT_DIR/.checkrust.sh"        "$HOME/.checkrust.sh"
 
-chmod +x "$HOME/.venv.sh" "$HOME/.checkrust.sh"
+chmod +x "$HOME/.venv.sh"
+# chmod +x "$HOME/.checkrust.sh"
 
-"$HOME/.checkrust.sh"
+# "$HOME/.checkrust.sh"
 
 echo -e "${SCRIPT_COLOR}Dotfiles installed in ${SECONDS} seconds — reloading shell…${RESET_COLOR}"
 exec "$SHELL"
