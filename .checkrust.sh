@@ -6,36 +6,31 @@ SCRIPT_COLOR='\033[1;35m'
 ERROR_COLOR='\033[1;31m'
 RESET_COLOR='\033[0m'
 
-fail() {
-  echo -e "${ERROR_COLOR}Error: $1${RESET_COLOR}"
-  exit 1
-}
+fail() { echo -e "${ERROR_COLOR}Error: $1${RESET_COLOR}"; exit 1; }
 
-echo -e "${SCRIPT_COLOR}Scanning for Rust source files…${RESET_COLOR}"
-if ! find . -type f -name '*.rs' -print -quit | grep -q .; then
-  echo -e "${SCRIPT_COLOR}No .rs files found — nothing to do.${RESET_COLOR}"
-  exit 0
-fi
+TARGET_DIR="${1:-$PWD}"
 
-echo -e "${SCRIPT_COLOR}.rs files detected. Verifying toolchain…${RESET_COLOR}"
-if command -v cargo &>/dev/null && command -v rustc &>/dev/null; then
-  echo -e "${SCRIPT_COLOR}Rust toolchain already present. All set.${RESET_COLOR}"
-  exit 0
-fi
+echo -e "${SCRIPT_COLOR}Scanning ${TARGET_DIR} for Rust source files…${RESET_COLOR}"
 
-echo -e "${SCRIPT_COLOR}Installing Rust (rustup + cargo)…${RESET_COLOR}"
-if command -v apt-get &>/dev/null; then
-  sudo apt-get update
-  sudo apt-get install -y curl build-essential
+if find "$TARGET_DIR" -type f -name '*.rs' | grep -q .; then
+  echo -e "${SCRIPT_COLOR}Rust code detected.${RESET_COLOR}"
+  
+  if ! command -v rustup &>/dev/null; then
+    echo -e "${SCRIPT_COLOR}Installing Rust toolchain…${RESET_COLOR}"
+
+    if ! command -v curl &>/dev/null; then
+      sudo apt-get update -y
+      sudo apt-get install -y curl build-essential
+    fi
+
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    # shellcheck disable=SC1091
+    source "$HOME/.cargo/env"
+  else
+    echo -e "${SCRIPT_COLOR}Rust already installed — skipping.${RESET_COLOR}"
+  fi
 else
-  fail "Supported package manager (apt-get) not found."
+  echo -e "${SCRIPT_COLOR}No *.rs files found. Skipping Rust install.${RESET_COLOR}"
 fi
 
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
-  | sh -s -- -y --no-modify-path || fail "rustup installation failed."
-
-source "$HOME/.cargo/env" || true
-
-command -v cargo &>/dev/null || fail "cargo still missing after install."
-
-echo -e "${SCRIPT_COLOR}Rust toolchain installed in ${SECONDS} seconds.${RESET_COLOR}"
+echo -e "${SCRIPT_COLOR}Done in ${SECONDS}s.${RESET_COLOR}"
