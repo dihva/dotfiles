@@ -16,7 +16,6 @@ fail() {
 }
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$SCRIPT_DIR" || fail "Unable to change directory to ${SCRIPT_DIR}."
 
 if [[ -f "requirements.txt" ]]; then
   REQ_FILE="requirements.txt"
