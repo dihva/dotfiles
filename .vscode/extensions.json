@@ -1,5 +1,5 @@
 {
-  "recommendations": 
+  "recommendations": [
     "github.codespaces",
     "github.copilot",
     "github.copilot-chat",
