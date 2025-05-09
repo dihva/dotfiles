@@ -19,14 +19,15 @@ if [ -f "$HOME/.bashrc" ]; then
   cp "$HOME/.bashrc" "$HOME/.bashrc.bak.$(date +%s)"
 fi
 
-cp "$SCRIPT_DIR/.bashrc"              "$HOME/.bashrc"
-cp "$SCRIPT_DIR/.venv.sh"             "$HOME/.venv.sh"
-# cp "$SCRIPT_DIR/.checkrust.sh"        "$HOME/.checkrust.sh"
+if ! cmp -s "$SCRIPT_DIR/.bashrc" "$HOME/.bashrc"; then
+  cp "$SCRIPT_DIR/.bashrc" "$HOME/.bashrc"
+fi
+
+if ! cmp -s "$SCRIPT_DIR/.venv.sh" "$HOME/.venv.sh"; then
+  cp "$SCRIPT_DIR/.venv.sh" "$HOME/.venv.sh"
+fi
 
 chmod +x "$HOME/.venv.sh"
-# chmod +x "$HOME/.checkrust.sh"
-
-# "$HOME/.checkrust.sh"
 
 echo -e "${SCRIPT_COLOR}Dotfiles installed in ${SECONDS} seconds — reloading shell…${RESET_COLOR}"
 exec "$SHELL"
