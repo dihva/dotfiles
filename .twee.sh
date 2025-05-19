@@ -14,7 +14,7 @@ if ! command -v jq >/dev/null 2>&1; then
 fi
 
 TREE_VERSION=$(tree --version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
-if [[ $(echo "$TREE_VERSION < 2.0.0" | bc -l) -eq 1 ]]; then
+if (( $(echo "$TREE_VERSION < 2.0" | bc -l 2>/dev/null) )); then
     echo "Error: tree version $TREE_VERSION is too old. Required ≥2.0.0 for JSON support."
     exit 1
 fi
