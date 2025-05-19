@@ -9,3 +9,7 @@ rs() {
 mvenv() {
   bash ~/.venv.sh
 }
+
+twee() {
+  bash ~/.twee.sh
+}
