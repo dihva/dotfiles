@@ -19,7 +19,7 @@ mvenv() {
 }
 
 twee() {
-  ~/neotwee "$@"
+  ~/.neotwee "$@"
   #you can use -f btw
 }
 
