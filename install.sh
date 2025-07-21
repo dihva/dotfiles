@@ -27,12 +27,12 @@ if ! cmp -s "$SCRIPT_DIR/.venv.sh" "$HOME/.venv.sh"; then
   cp "$SCRIPT_DIR/.venv.sh" "$HOME/.venv.sh"
 fi
 
-if ! cmp -s "$SCRIPT_DIR/.twee.sh" "$HOME/.twee.sh"; then
-  cp "$SCRIPT_DIR/.twee.sh" "$HOME/.twee.sh"
+if ! cmp -s "$SCRIPT_DIR/neotwee" "$HOME/.neotwee"; then
+  cp "$SCRIPT_DIR/neotwee" "$HOME/.neotwee"
 fi
 
 chmod +x "$HOME/.venv.sh"
-chmod +x "$HOME/.twee.sh"
+chmod +x "$HOME/.neotwee"
 
 echo -e "${SCRIPT_COLOR}Dotfiles installed in ${SECONDS} seconds — reloading shell…${RESET_COLOR}"
 exec "$SHELL"
