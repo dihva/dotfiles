@@ -34,5 +34,8 @@ fi
 chmod +x "$HOME/.venv.sh"
 chmod +x "$HOME/.neotwee"
 
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+  | sh -s -- -y --default-toolchain nightly
+
 echo -e "${SCRIPT_COLOR}Dotfiles installed in ${SECONDS} seconds — reloading shell…${RESET_COLOR}"
 exec "$SHELL"
