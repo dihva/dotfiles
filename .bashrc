@@ -49,9 +49,10 @@ is() {
   return $status
 }
 
+#idk if i really want this rn lmao
 #root dir on launch
-if [[ $- == *i* ]]; then
-  cd /
-fi
+#if [[ $- == *i* ]]; then
+#  cd /
+#fi
 
 export PS1="\[\e[38;5;218m\]\u\[\e[38;5;153m\]@\h\[\e[0m\]:\[\e[38;5;117m\] \w\[\e[0m\]\$ "
