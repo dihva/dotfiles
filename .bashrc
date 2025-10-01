@@ -28,9 +28,8 @@ cls() {
   #im lwk schitzo
 }
 
-speedtest() {
-  speedtest-cli "$@"
-  #you can use --simple and --json btw
+upd() {
+  sudo apt update && sudo apt upgrade -y
 }
 
 is() {
@@ -55,4 +54,10 @@ is() {
 #  cd /
 #fi
 
-export PS1="\[\e[38;5;218m\]\u\[\e[38;5;153m\]@\h\[\e[0m\]:\[\e[38;5;117m\] \w\[\e[0m\]\$ "
+
+# truecolor (exact)
+export PS1="\[\e[38;2;246;173;198m\]\u\[\e[38;2;173;246;221m\]@\h\[\e[0m\]:\[\e[38;5;117m\] \w\[\e[0m\]\$ "
+# 256-color (approx)
+#export PS1="\[\e[38;5;218m\]\u\[\e[38;5;158m\]@\h\[\e[0m\]:\[\e[38;5;117m\] \w\[\e[0m\]\$ "
+
+export PIP_BREAK_SYSTEM_PACKAGES=1
